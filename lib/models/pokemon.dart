@@ -1,4 +1,26 @@
 class Pokemon {
+  // all the official types, used to check the types setter
+  static const List<String> _validPokemonTypes = [
+    'normal',
+    'fire',
+    'water',
+    'electric',
+    'grass',
+    'ice',
+    'fighting',
+    'poison',
+    'ground',
+    'flying',
+    'psychic',
+    'bug',
+    'rock',
+    'ghost',
+    'dragon',
+    'dark',
+    'steel',
+    'fairy',
+  ];
+
   // late since the setters fill these in from the constructor
   late String _name;
   late int _id;
@@ -75,7 +97,8 @@ class Pokemon {
   set weight(double value) {
     if (value < 0.1 || value > 1000.0) {
       throw Exception(
-          'Pokemon weight must be between 0.1 and 1000.0 kilograms');
+        'Pokemon weight must be between 0.1 and 1000.0 kilograms',
+      );
     }
 
     _weight = value;
@@ -105,6 +128,13 @@ class Pokemon {
       throw Exception('Pokemon must have between 1 and 2 types');
     }
 
+    // make sure each type is actually a real one
+    for (var type in value) {
+      if (!_validatePokemonType(type)) {
+        throw Exception('Invalid Pokemon type: $type');
+      }
+    }
+
     _types = value;
   }
 
@@ -119,5 +149,10 @@ class Pokemon {
     }
 
     _captureDate = value;
+  }
+
+  // true if the type is in the valid list
+  bool _validatePokemonType(String type) {
+    return _validPokemonTypes.contains(type);
   }
 }
