@@ -49,6 +49,26 @@ class Pokemon {
     this.captureDate = captureDate;
   }
 
+  /// Makes a Pokemon from the api data
+  factory Pokemon.fromPokeApiData(dynamic data) {
+    // get the type names
+    List<String> types = [];
+
+    for (var type in data['types']) {
+      types.add(type['type']['name']);
+    }
+
+    return Pokemon(
+      name: data['name'],
+      id: data['id'],
+      height: data['height'] / 10, // to meters
+      weight: data['weight'] / 10, // to kg
+      baseExperience: data['base_experience'],
+      types: types,
+      captureDate: DateTime.now(), // api doesn't have this
+    );
+  }
+
   /// The name of the pokemon
   String get name {
     return _name;
@@ -154,5 +174,10 @@ class Pokemon {
   // true if the type is in the valid list
   bool _validatePokemonType(String type) {
     return _validPokemonTypes.contains(type);
+  }
+
+  @override
+  String toString() {
+    return 'Pokemon: $_name (#$_id), Type(s): $_types, Height: ${_height}m, Weight: ${_weight}kg, Base Experience: $_baseExperience, Captured: $_captureDate';
   }
 }
